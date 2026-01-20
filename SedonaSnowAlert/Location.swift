@@ -105,17 +105,30 @@ class LocationManager: ObservableObject {
 
     func toggleAlerts(for location: Location) {
         if let index = locations.firstIndex(where: { $0.id == location.id }) {
-            locations[index].alertsEnabled.toggle()
+            if locations[index].alertsEnabled {
+                // Turning off alerts for this location
+                locations[index].alertsEnabled = false
+            } else {
+                // Turning on alerts - disable all others first
+                for i in 0..<locations.count {
+                    locations[i].alertsEnabled = false
+                }
+                locations[index].alertsEnabled = true
+            }
             saveLocations()
         }
     }
 
-    var maxSnowProbability: Int {
-        locations.map { $0.snowProbability }.max() ?? 0
+    var alertedLocation: Location? {
+        locations.first { $0.alertsEnabled }
     }
 
-    var hasAnySnowExpected: Bool {
-        locations.contains { $0.hasSnowExpected }
+    var selectedSnowProbability: Int {
+        alertedLocation?.snowProbability ?? 0
+    }
+
+    var hasSelectedSnowExpected: Bool {
+        alertedLocation?.hasSnowExpected ?? false
     }
 
     private func saveLocations() {

@@ -7,6 +7,7 @@ struct SedonaSnowAlertApp: App {
     @StateObject private var notificationManager = NotificationManager()
     @StateObject private var locationManager = LocationManager()
     @State private var addCityWindow: NSWindow?
+    @State private var chartWindow: NSWindow?
 
     var body: some Scene {
         MenuBarExtra {
@@ -14,7 +15,8 @@ struct SedonaSnowAlertApp: App {
                 weatherService: weatherService,
                 notificationManager: notificationManager,
                 locationManager: locationManager,
-                showAddCity: { openAddCityWindow() }
+                showAddCity: { openAddCityWindow() },
+                showForecastChart: { openChartWindow() }
             )
         } label: {
             MenuBarLabel(locationManager: locationManager)
@@ -49,6 +51,34 @@ struct SedonaSnowAlertApp: App {
 
         addCityWindow = window
     }
+
+    private func openChartWindow() {
+        if let existingWindow = chartWindow {
+            existingWindow.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+            return
+        }
+
+        let contentView = ForecastChartWindowView(locationManager: locationManager) {
+            chartWindow?.close()
+            chartWindow = nil
+        }
+
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 650, height: 550),
+            styleMask: [.titled, .closable, .resizable],
+            backing: .buffered,
+            defer: false
+        )
+        window.title = "Snow Forecast"
+        window.contentView = NSHostingView(rootView: contentView)
+        window.center()
+        window.isReleasedWhenClosed = false
+        window.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+
+        chartWindow = window
+    }
 }
 
 struct MenuBarLabel: View {
@@ -58,8 +88,8 @@ struct MenuBarLabel: View {
         HStack(spacing: 4) {
             Image(systemName: "snowflake")
                 .symbolRenderingMode(.palette)
-                .foregroundStyle(locationManager.hasAnySnowExpected ? .blue : .gray)
-            Text("\(locationManager.maxSnowProbability)%")
+                .foregroundStyle(locationManager.hasSelectedSnowExpected ? .blue : .gray)
+            Text("\(locationManager.selectedSnowProbability)%")
                 .font(.system(size: 12, weight: .medium))
         }
     }
@@ -70,6 +100,7 @@ struct MenuBarView: View {
     @ObservedObject var notificationManager: NotificationManager
     @ObservedObject var locationManager: LocationManager
     var showAddCity: () -> Void
+    var showForecastChart: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -126,6 +157,10 @@ struct MenuBarView: View {
             .disabled(weatherService.isChecking)
 
             Divider()
+
+            Button("Show Forecast Graph...") {
+                showForecastChart()
+            }
 
             Button("Add City...") {
                 showAddCity()

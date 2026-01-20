@@ -11,6 +11,8 @@
 		A1000003234567890ABCDEF1 /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000004234567890ABCDEF1 /* WeatherService.swift */; };
 		A1000005234567890ABCDEF1 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000006234567890ABCDEF1 /* NotificationManager.swift */; };
 		A1000017234567890ABCDEF1 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000018234567890ABCDEF1 /* Location.swift */; };
+		A1000019234567890ABCDEF1 /* SnowForecastChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001A234567890ABCDEF1 /* SnowForecastChartView.swift */; };
+		A100001B234567890ABCDEF1 /* ForecastChartWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001C234567890ABCDEF1 /* ForecastChartWindowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		A1000007234567890ABCDEF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1000008234567890ABCDEF1 /* SedonaSnowAlert.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SedonaSnowAlert.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1000018234567890ABCDEF1 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		A100001A234567890ABCDEF1 /* SnowForecastChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowForecastChartView.swift; sourceTree = "<group>"; };
+		A100001C234567890ABCDEF1 /* ForecastChartWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastChartWindowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +52,8 @@
 				A1000004234567890ABCDEF1 /* WeatherService.swift */,
 				A1000006234567890ABCDEF1 /* NotificationManager.swift */,
 				A1000018234567890ABCDEF1 /* Location.swift */,
+				A100001A234567890ABCDEF1 /* SnowForecastChartView.swift */,
+				A100001C234567890ABCDEF1 /* ForecastChartWindowView.swift */,
 				A1000007234567890ABCDEF1 /* Info.plist */,
 			);
 			path = SedonaSnowAlert;
@@ -133,6 +139,8 @@
 				A1000003234567890ABCDEF1 /* WeatherService.swift in Sources */,
 				A1000005234567890ABCDEF1 /* NotificationManager.swift in Sources */,
 				A1000017234567890ABCDEF1 /* Location.swift in Sources */,
+				A1000019234567890ABCDEF1 /* SnowForecastChartView.swift in Sources */,
+				A100001B234567890ABCDEF1 /* ForecastChartWindowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
