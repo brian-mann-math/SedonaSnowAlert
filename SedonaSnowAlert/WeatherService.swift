@@ -111,8 +111,8 @@ class WeatherService: ObservableObject {
         var forecasts: [DailyForecast] = []
         let daily = response.daily
 
-        // Build forecast for days 1-10
-        let endDay = min(10, daily.time.count)
+        // Build forecast for days 0-10 (11 days total)
+        let endDay = min(11, daily.time.count)
 
         for i in 0..<endDay {
             let date = daily.time[i]
