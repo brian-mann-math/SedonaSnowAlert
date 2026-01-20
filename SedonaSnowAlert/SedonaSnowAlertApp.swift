@@ -1,6 +1,21 @@
 import SwiftUI
 import CoreLocation
 
+extension Color {
+    static func snowProbabilityColor(for probability: Int) -> Color {
+        let normalizedValue = Double(max(0, min(100, probability))) / 100.0
+        // Interpolate from gray (0%) to bright blue (100%)
+        let gray = Color(red: 0.6, green: 0.6, blue: 0.6)
+        let blue = Color(red: 0.0, green: 0.5, blue: 1.0)
+
+        return Color(
+            red: 0.6 * (1 - normalizedValue) + 0.0 * normalizedValue,
+            green: 0.6 * (1 - normalizedValue) + 0.5 * normalizedValue,
+            blue: 0.6 * (1 - normalizedValue) + 1.0 * normalizedValue
+        )
+    }
+}
+
 @main
 struct SedonaSnowAlertApp: App {
     @StateObject private var weatherService = WeatherService()
@@ -85,12 +100,16 @@ struct MenuBarLabel: View {
     @ObservedObject var locationManager: LocationManager
 
     var body: some View {
+        let probability = locationManager.selectedSnowProbability
+        let color = Color.snowProbabilityColor(for: probability)
+
         HStack(spacing: 4) {
             Image(systemName: "snowflake")
                 .symbolRenderingMode(.palette)
-                .foregroundStyle(locationManager.hasSelectedSnowExpected ? .blue : .gray)
-            Text("\(locationManager.selectedSnowProbability)%")
+                .foregroundStyle(color)
+            Text("\(probability)%")
                 .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(color)
         }
     }
 }
@@ -111,7 +130,7 @@ struct MenuBarView: View {
 
             // List of locations with 10-day forecast submenu
             ForEach(locationManager.locations) { location in
-                Menu("\(location.name) — \(location.snowProbability)%\(location.alertsEnabled ? " \u{1F514}" : "")") {
+                Menu {
                     Text("10-Day Snow Forecast")
                         .font(.headline)
                     Divider()
@@ -121,6 +140,7 @@ struct MenuBarView: View {
                     } else {
                         ForEach(location.dailyForecasts) { day in
                             Text("\(day.displayDate): \(day.snowProbability)%\(day.snowfall > 0 ? " (\(String(format: "%.1f", day.snowfall))cm)" : "")")
+                                .foregroundColor(Color.snowProbabilityColor(for: day.snowProbability))
                         }
                     }
 
@@ -135,6 +155,9 @@ struct MenuBarView: View {
                             locationManager.removeLocation(location)
                         }
                     }
+                } label: {
+                    Text("\(location.name) — \(location.snowProbability)%\(location.alertsEnabled ? " \u{1F514}" : "")")
+                        .foregroundColor(Color.snowProbabilityColor(for: location.snowProbability))
                 }
             }
 
@@ -190,9 +213,11 @@ struct LocationRow: View {
     @State private var isHovering = false
 
     var body: some View {
+        let color = Color.snowProbabilityColor(for: location.snowProbability)
+
         HStack(spacing: 8) {
             Image(systemName: "snowflake")
-                .foregroundColor(location.hasSnowExpected ? .blue : .gray)
+                .foregroundColor(color)
                 .font(.system(size: 12))
 
             Text(location.name)
@@ -201,7 +226,7 @@ struct LocationRow: View {
             Spacer()
 
             Text("\(location.snowProbability)%")
-                .foregroundColor(location.hasSnowExpected ? .blue : .primary)
+                .foregroundColor(color)
                 .font(.system(size: 13, weight: .semibold, design: .monospaced))
                 .frame(minWidth: 35, alignment: .trailing)
 

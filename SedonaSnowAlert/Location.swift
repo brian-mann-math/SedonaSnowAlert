@@ -75,7 +75,12 @@ class LocationManager: ObservableObject {
     }
 
     func addLocation(_ location: Location) {
-        locations.append(location)
+        var newLocation = location
+        // Only one location can have alerts - disable if another already has alerts
+        if alertedLocation != nil {
+            newLocation.alertsEnabled = false
+        }
+        locations.append(newLocation)
         saveLocations()
     }
 
